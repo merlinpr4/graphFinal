@@ -86,16 +86,19 @@ int main()
    // Model ourModel("C:/Users/thoma/Desktop/GraphicsSetup/graphicsSetup/graphicsSetup/backpack/backpack.obj");
    // Model ourModel("backpack/backpack.obj");
     //Model ourModel("C:/Users/thoma/Documents/Merlin college - 4th yr/graphics/snowManMatt/snowmanScary.obj");
-    
 
     Model ourModel("snowManMatt/noArmsNoHat.obj");
 
     Model armRight("snowManMatt/rightArm.obj");
     Model armLeft("snowManMatt/leftArm.obj");
 
-
     Model hat("snowManMatt/hat.obj");
     Model floor("snowManMatt/floor.obj");
+
+    Model robin("models/robin2.obj");
+
+    //snowmanNoHierachy model
+    Model snowManBasic("snowManMatt/snowmanScary.obj");
 
 
    // Model ourModel("snowManMatt/snowmanScary.obj");
@@ -134,7 +137,7 @@ int main()
 
         // render the loaded model base
         glm::mat4 modelBody = glm::mat4(1.0f);
-        modelBody = glm::translate(modelBody, glm::vec3(cos(currentFrame) * 5, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        modelBody = glm::translate(modelBody, glm::vec3(10.0f, 0.0f, cos((float)glfwGetTime()) * 5)); // translate it down so it's at the center of the scene
         modelBody = glm::scale(modelBody, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 6, glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -154,26 +157,45 @@ int main()
 
         //render the hat 
         glm::mat4 modelHat = glm::mat4(1.0f);
-        modelHat = glm::translate(modelHat, glm::vec3(0.0f, -0.2f, 0.0f));
+        modelHat = glm::translate(modelHat, glm::vec3(0.0f, -0.3f, 0.0f));
         modelHat = glm::scale(modelHat, glm::vec3(1.0f, 1.0f, 1.0f));
-        modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.5f, 0.0f));
+        modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.0f, 0.5f));
 
 
         //render the floor
         glm::mat4 modelFloor = glm::mat4(1.0f);
 
         modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelFloor = glm::scale(modelHat, glm::vec3(1.0f, 1.0f, 1.0f));
+        modelFloor = glm::scale(modelFloor, glm::vec3(1.0f, 1.0f, 1.0f));
 
      
+        //robin
+        //glm::mat4 modelRobin = glm::mat4(1.0f);
+        //modelRobin = glm::translate(modelRobin, glm::vec3(50.0f, 50.0f, 0.0f));
+        //modelRobin = glm::scale(modelRobin, glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+        //snowman Crowd connected to modelBody
+        glm::mat4 modelSnowman2 = glm::mat4(1.0f);
+        modelSnowman2 = glm::translate(modelSnowman2, glm::vec3(10.0f, 0.0f, (cos((float)glfwGetTime()) * 5))); // translate it down so it's at the center of the scene
+
+        glm::mat4 modelSnowman3 = glm::mat4(1.0f);
+        modelSnowman3 = glm::translate(modelSnowman3, glm::vec3(20.0f, 0.0f, (cos((float)glfwGetTime()) * 5)));
+       
+        glm::mat4 modelSnowman4 = glm::mat4(1.0f);
+        modelSnowman4 = glm::translate(modelSnowman4, glm::vec3(15.0f, -.6f, -10+ (cos((float)glfwGetTime()) * 5)));
+
+        glm::mat4 modelSnowman5 = glm::mat4(1.0f);
+        modelSnowman5 = glm::translate(modelSnowman5, glm::vec3(5.0f, -.7f, -10 + (cos((float)glfwGetTime()) * 5)));
+
+
+
         ourShader.setMat4("model", modelBody);
         ourModel.Draw(ourShader);
-
 
         //right arm moves along with the body
         ourShader.setMat4("model", modelBody * rightArm);
         armRight.Draw(ourShader);
-
 
         //left arn moves along with the body
         ourShader.setMat4("model", modelBody * leftArm);
@@ -182,10 +204,27 @@ int main()
         ourShader.setMat4("model", modelBody * modelHat);
         hat.Draw(ourShader);
 
+        //crowd of snowman
+        ourShader.setMat4("model", modelBody * modelSnowman2);
+        snowManBasic.Draw(ourShader);
+
+        ourShader.setMat4("model", modelBody * modelSnowman3);
+        snowManBasic.Draw(ourShader);
+
+        ourShader.setMat4("model", modelBody * modelSnowman4);
+        snowManBasic.Draw(ourShader);
+
+        ourShader.setMat4("model", modelBody* modelSnowman5);
+        snowManBasic.Draw(ourShader);
+
+
         ourShader.setMat4("model", modelFloor);
         floor.Draw(ourShader);
 
+     //   ourShader.setMat4("model", modelRobin);
+    //    robin.Draw(ourShader);
 
+       
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
