@@ -93,7 +93,9 @@ int main()
     Model armLeft("snowManMatt/leftArm.obj");
 
     Model hat("snowManMatt/hat.obj");
-    Model floor("snowManMatt/floor.obj");
+    Model floor("floorModel/snowFloor.obj");
+
+    Model mountain("floorModel/mountain.obj");
 
     Model robin("models/robin2.obj");
 
@@ -138,6 +140,13 @@ int main()
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
+
+        //render the floor
+        glm::mat4 modelFloor = glm::mat4(1.0f);
+        modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
+        modelFloor = glm::scale(modelFloor, glm::vec3(1.0f, 1.0f, 1.0f));
+
+
         // render the loaded model base
         glm::mat4 modelBody = glm::mat4(1.0f);
         modelBody = glm::translate(modelBody, glm::vec3(10.0f, 0.0f, cos((float)glfwGetTime()) * 5)); // translate it down so it's at the center of the scene
@@ -165,16 +174,18 @@ int main()
         modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.0f, 0.1f));
 
 
-        //render the floor
-        glm::mat4 modelFloor = glm::mat4(1.0f);
-        modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelFloor = glm::scale(modelFloor, glm::vec3(1.0f, 1.0f, 1.0f));
-
         //load cyclinder
-        glm::mat4 modelCyc = glm::mat4(1.0f);
-        modelCyc = glm::translate(modelCyc, glm::vec3(20.0f, -0.1f, 0.0f));
-        modelCyc = glm::scale(modelCyc, glm::vec3(1.0f, 1.0f, 1.0f));
+        //glm::mat4 modelCyc = glm::mat4(1.0f);
+        //modelCyc = glm::translate(modelCyc, glm::vec3(20.0f, -0.1f, 0.0f));
+        //modelCyc = glm::scale(modelCyc, glm::vec3(1.0f, 1.0f, 1.0f));
       
+
+        glm::mat4 modelMountain = glm::mat4(1.0f);
+        modelMountain = glm::translate(modelMountain, glm::vec3(0.0f, 10.0f, 0.0f));
+        modelMountain = glm::scale(modelMountain, glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+
 
      
         //robin
@@ -197,6 +208,8 @@ int main()
         modelSnowman5 = glm::translate(modelSnowman5, glm::vec3(5.0f, -.7f, -10 + (cos((float)glfwGetTime()) * 5)));
 
 
+        ourShader.setMat4("model", modelFloor);
+        floor.Draw(ourShader);
 
         ourShader.setMat4("model", modelBody);
         ourModel.Draw(ourShader);
@@ -226,11 +239,8 @@ int main()
         snowManBasic.Draw(ourShader);
 
 
-        ourShader.setMat4("model", modelFloor);
-        floor.Draw(ourShader);
-
-        ourShader.setMat4("model", modelCyc);
-        cycl.Draw(ourShader);
+        ourShader.setMat4("model", modelMountain);
+        mountain.Draw(ourShader);
 
      //   ourShader.setMat4("model", modelRobin);
     //    robin.Draw(ourShader);
