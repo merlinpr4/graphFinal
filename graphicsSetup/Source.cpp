@@ -101,6 +101,9 @@ int main()
     Model snowManBasic("snowManMatt/snowmanScary.obj");
 
 
+    Model cycl("models/cyclinder.obj");
+
+
    // Model ourModel("snowManMatt/snowmanScary.obj");
     //Model ourModel("C:/Users/thoma/Desktop/snowManMatt/snowmanScary.obj");
 
@@ -151,22 +154,27 @@ int main()
 
         //render the leftArm 
         glm::mat4 leftArm = glm::mat4(1.0f);
-        leftArm = glm::translate(leftArm, glm::vec3(-0.2f, 0.0f, 0.5f));
+        leftArm = glm::translate(leftArm, glm::vec3(-0.2f, 0.0f, .5f));
         leftArm = glm::scale(leftArm, glm::vec3(1.0f, 1.0f, 1.0f));
         leftArm = glm::rotate(leftArm, sin((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
 
         //render the hat 
         glm::mat4 modelHat = glm::mat4(1.0f);
-        modelHat = glm::translate(modelHat, glm::vec3(0.0f, -0.3f, 0.0f));
+        modelHat = glm::translate(modelHat, glm::vec3(0.0f, -0.1f, 0.0f));
         modelHat = glm::scale(modelHat, glm::vec3(1.0f, 1.0f, 1.0f));
-        modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.0f, 0.5f));
+        modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.0f, 0.1f));
 
 
         //render the floor
         glm::mat4 modelFloor = glm::mat4(1.0f);
-
         modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
         modelFloor = glm::scale(modelFloor, glm::vec3(1.0f, 1.0f, 1.0f));
+
+        //load cyclinder
+        glm::mat4 modelCyc = glm::mat4(1.0f);
+        modelCyc = glm::translate(modelCyc, glm::vec3(20.0f, -0.1f, 0.0f));
+        modelCyc = glm::scale(modelCyc, glm::vec3(1.0f, 1.0f, 1.0f));
+      
 
      
         //robin
@@ -220,6 +228,9 @@ int main()
 
         ourShader.setMat4("model", modelFloor);
         floor.Draw(ourShader);
+
+        ourShader.setMat4("model", modelCyc);
+        cycl.Draw(ourShader);
 
      //   ourShader.setMat4("model", modelRobin);
     //    robin.Draw(ourShader);
