@@ -103,7 +103,8 @@ int main()
     Model snowManBasic("snowManMatt/snowmanScary.obj");
 
 
-    Model cycl("models/cyclinder.obj");
+    //tree model if crash reduce poly count
+    Model tree("floorModel/tree.obj");
 
 
    // Model ourModel("snowManMatt/snowmanScary.obj");
@@ -185,6 +186,11 @@ int main()
         modelMountain = glm::scale(modelMountain, glm::vec3(1.0f, 1.0f, 1.0f));
 
 
+        glm::mat4 modelTree = glm::mat4(1.0f);
+        modelTree = glm::translate(modelTree, glm::vec3(0.0f, 0.0f, 0.0f));
+        modelTree = glm::scale(modelTree, glm::vec3(1.0f, 1.0f, 1.0f));
+
+
 
 
      
@@ -241,6 +247,10 @@ int main()
 
         ourShader.setMat4("model", modelMountain);
         mountain.Draw(ourShader);
+
+
+        ourShader.setMat4("model", modelTree);
+        tree.Draw(ourShader);
 
      //   ourShader.setMat4("model", modelRobin);
     //    robin.Draw(ourShader);
