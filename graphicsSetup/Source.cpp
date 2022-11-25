@@ -145,14 +145,14 @@ int main()
         //render the floor
         glm::mat4 modelFloor = glm::mat4(1.0f);
         modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelFloor = glm::scale(modelFloor, glm::vec3(1.0f, 1.0f, 1.0f));
+        modelFloor = glm::scale(modelFloor, glm::vec3(0.25f, 0.25f, 0.25f));
 
 
         // render the loaded model base
         glm::mat4 modelBody = glm::mat4(1.0f);
         modelBody = glm::translate(modelBody, glm::vec3(10.0f, 0.0f, cos((float)glfwGetTime()) * 5)); // translate it down so it's at the center of the scene
-        modelBody = glm::scale(modelBody, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-        modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 6, glm::vec3(1.0f, 0.0f, 0.0f));
+        modelBody = glm::scale(modelBody, glm::vec3(0.10f, 0.10f, 0.10f));	// it's a bit too big for our scene, so scale it down
+        //modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 6, glm::vec3(1.0f, 0.0f, 0.0f));
 
 
         //render the rightArm 
@@ -182,18 +182,14 @@ int main()
       
 
         glm::mat4 modelMountain = glm::mat4(1.0f);
-        modelMountain = glm::translate(modelMountain, glm::vec3(0.0f, 10.0f, 0.0f));
-        modelMountain = glm::scale(modelMountain, glm::vec3(1.0f, 1.0f, 1.0f));
+        modelMountain = glm::translate(modelMountain, glm::vec3(0.0f, -5.0f, 0.0f));
+        modelMountain = glm::scale(modelMountain, glm::vec3(0.25f, 0.25f, 0.25f));
 
 
         glm::mat4 modelTree = glm::mat4(1.0f);
         modelTree = glm::translate(modelTree, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelTree = glm::scale(modelTree, glm::vec3(1.0f, 1.0f, 1.0f));
+        modelTree = glm::scale(modelTree, glm::vec3(0.25f, 0.25f, 0.25f));
 
-
-
-
-     
         //robin
         //glm::mat4 modelRobin = glm::mat4(1.0f);
         //modelRobin = glm::translate(modelRobin, glm::vec3(50.0f, 50.0f, 0.0f));
@@ -201,6 +197,7 @@ int main()
 
 
         //snowman Crowd connected to modelBody
+
         glm::mat4 modelSnowman2 = glm::mat4(1.0f);
         modelSnowman2 = glm::translate(modelSnowman2, glm::vec3(10.0f, 0.0f, (cos((float)glfwGetTime()) * 5))); // translate it down so it's at the center of the scene
 
@@ -232,6 +229,7 @@ int main()
         hat.Draw(ourShader);
 
         //crowd of snowman
+        
         ourShader.setMat4("model", modelBody * modelSnowman2);
         snowManBasic.Draw(ourShader);
 
@@ -244,13 +242,13 @@ int main()
         ourShader.setMat4("model", modelBody* modelSnowman5);
         snowManBasic.Draw(ourShader);
 
-
         ourShader.setMat4("model", modelMountain);
         mountain.Draw(ourShader);
 
 
         ourShader.setMat4("model", modelTree);
         tree.Draw(ourShader);
+        
 
      //   ourShader.setMat4("model", modelRobin);
     //    robin.Draw(ourShader);

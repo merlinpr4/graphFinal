@@ -144,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="backpack\backpack.mtl" />
+    <None Include="light.fs" />
+    <None Include="light.vs" />
     <None Include="shad.fs" />
     <None Include="shad.vs" />
     <None Include="shader_frag.fs" />
