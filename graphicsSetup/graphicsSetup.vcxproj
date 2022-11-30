@@ -150,6 +150,8 @@
     <None Include="shad.vs" />
     <None Include="shader_frag.fs" />
     <None Include="shader_vert.vs" />
+    <None Include="skybox.fs" />
+    <None Include="skybox.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png" />

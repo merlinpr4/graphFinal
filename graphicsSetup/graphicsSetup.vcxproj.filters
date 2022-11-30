@@ -64,6 +64,12 @@
     <None Include="light.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="skybox.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="skybox.fs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png">
