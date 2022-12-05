@@ -83,8 +83,8 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader ourShader("shadLight.vs", "shadLight.fs");
-    Shader hatShader("shadLigh.vs", "shadLight.fs");
+    Shader ourShader("shad.vs", "shad.fs");
+    Shader hatShader("shad.vs", "shad.fs");
 
 
     Shader skyboxShader("skybox.vs","skybox.fs");
