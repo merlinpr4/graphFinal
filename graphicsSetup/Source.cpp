@@ -84,6 +84,9 @@ int main()
     // build and compile shaders
     // -------------------------
     Shader ourShader("shadLight.vs", "shadLight.fs");
+    Shader hatShader("shadLight.vs", "shadLight.fs");
+
+
     Shader skyboxShader("skybox.vs","skybox.fs");
 
     Shader lightingShader("light.vs", "light.fs");
@@ -285,18 +288,20 @@ int main()
         //move light around
         lightPos.x = 8.0f + sin(glfwGetTime()) * 2.0f;
    
-        //colour cube to test light
+
         lightingShader.use();
-        lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("lightPos", lightPos);
+        lightingShader.setVec3("light.position", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);
 
         // light properties
-        glm::vec3 lightColor;
+       
+        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+        /* fun light changing option
         lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0));
         lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7));
         lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3));
+        */
+
         glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
         glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
         lightingShader.setVec3("light.ambient", ambientColor);
@@ -304,16 +309,10 @@ int main()
         lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         // material properties
-        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
-        lightingShader.setFloat("material.shininess", 32.0f);
-
-
-
-
-
-
+        lightingShader.setVec3("material.ambient", 0.24725f,0.1995f,0.0745f);
+        lightingShader.setVec3("material.diffuse", 0.75164f,0.60648f,0.22648f);
+        lightingShader.setVec3("material.specular", 0.628281f,0.555802f,0.366065f);
+        lightingShader.setFloat("material.shininess", 0.4f);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -323,7 +322,7 @@ int main()
 
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+        lightingShader.setMat4("model", model); //this tells the model to use this shader
 
         // render the cube
         glBindVertexArray(cubeVAO);
@@ -341,27 +340,56 @@ int main()
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
-        
+        //my confusion is how do i set different material properties for each object ? do i make multiple shaders instances?? 
+       
+      
         ourShader.use();
-        ourShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        ourShader.setVec3("lightPos", lightPos);
+        ourShader.setVec3("light.position", lightPos);
         ourShader.setVec3("viewPos", camera.Position);
-
-        // view/projection transformations
-        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
         
+        ourShader.setVec3("light.ambient", ambientColor);
+        ourShader.setVec3("light.diffuse", diffuseColor);
+        ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
+        // material properties
+
+        //current issue only the most current shader colour is being drawn?
+
+        /*
+        ourShader.setVec3("material.ambient", 0.24725f, 0.1995f, 0.0745f);
+        ourShader.setVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);
+        ourShader.setVec3("material.specular", 0.628281f, 0.555802f, 0.366065f);
+        ourShader.setFloat("material.shininess", 0.4f);
+        */
+
+        ourShader.setVec3("material.ambient", 1.0f, 1.0f, 1.00f);
+        ourShader.setVec3("material.diffuse", 1.0f, 1.0f, 1.0f);
+        ourShader.setVec3("material.specular", 1.0f, 1.0f, 1.0f); // figure out colour later for snow
+        ourShader.setFloat("material.shininess", 12.0f);
+       
+        hatShader.use();
+        hatShader.setVec3("light.position", lightPos);
+        hatShader.setVec3("viewPos", camera.Position);
+        hatShader.setMat4("projection", projection);
+        hatShader.setMat4("view", view);
+
+        hatShader.setVec3("light.ambient", ambientColor);
+        hatShader.setVec3("light.diffuse", diffuseColor);
+        hatShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        // material properties
+        hatShader.setVec3("material.ambient", 0.1745f, 0.01175f, 0.01175f);
+        hatShader.setVec3("material.diffuse", 0.61424f, 0.04136f, 0.04136f);
+        hatShader.setVec3("material.specular", 0.727811f, 0.626959f, 0.626959f);
+        hatShader.setFloat("material.shininess", 0.6f);
        
 
         //render the floor
         glm::mat4 modelFloor = glm::mat4(1.0f);
         modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
         modelFloor = glm::scale(modelFloor, glm::vec3(0.25f, 0.25f, 0.25f));
-
 
         // render the loaded model base
         glm::mat4 modelBody = glm::mat4(1.0f);
@@ -425,14 +453,16 @@ int main()
         glm::mat4 modelSnowman5 = glm::mat4(1.0f);
         modelSnowman5 = glm::translate(modelSnowman5, glm::vec3(5.0f, -.7f, -10 + (cos((float)glfwGetTime()) * 5)));
 
-
+        ourShader.use();
         ourShader.setMat4("model", modelFloor);
         floor.Draw(ourShader);
 
+       
         ourShader.setMat4("model", modelBody);
-        ourModel.Draw(ourShader);
+        ourModel.Draw(hatShader);
 
         //right arm moves along with the body
+        ourShader.use();
         ourShader.setMat4("model", modelBody * rightArm);
         armRight.Draw(ourShader);
 
@@ -440,22 +470,22 @@ int main()
         ourShader.setMat4("model", modelBody * leftArm);
         armLeft.Draw(ourShader);
 
-        ourShader.setMat4("model", modelBody * modelHat);
-        hat.Draw(ourShader);
+        hatShader.use();
+        hatShader.setMat4("model", modelBody* modelHat);
+        hat.Draw(hatShader);
+   
+        hatShader.setMat4("model", modelBody* modelSnowman3);
+        snowManBasic.Draw(hatShader);
 
-        //crowd of snowman
-        
+        //crowd of snowman 
+        ourShader.use();
         ourShader.setMat4("model", modelBody * modelSnowman2);
         snowManBasic.Draw(ourShader);
 
-        ourShader.setMat4("model", modelBody * modelSnowman3);
-        snowManBasic.Draw(ourShader);
-
+     
         ourShader.setMat4("model", modelBody * modelSnowman4);
      //   snowManBasic.Draw(ourShader);
 
-        ourShader.setMat4("model", modelBody* modelSnowman5);
-    //    snowManBasic.Draw(ourShader);
 
         ourShader.setMat4("model", modelMountain);
       //  mountain.Draw(ourShader);
@@ -463,7 +493,11 @@ int main()
 
         ourShader.setMat4("model", modelTree);
       //  tree.Draw(ourShader);
-        
+
+      
+        //even though it says our shader the last shader colour combo is used???
+        ourShader.setMat4("model", modelBody* modelSnowman5);
+        snowManBasic.Draw(ourShader);
 
      //   ourShader.setMat4("model", modelRobin);
     //    robin.Draw(ourShader);
