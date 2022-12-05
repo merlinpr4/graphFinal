@@ -148,6 +148,10 @@
     <None Include="lightBox.vs" />
     <None Include="light.fs" />
     <None Include="light.vs" />
+    <None Include="manyLights.fs" />
+    <None Include="manyLights.vs" />
+    <None Include="mat.fs" />
+    <None Include="mat.vs" />
     <None Include="shad.fs" />
     <None Include="shad.vs" />
     <None Include="shader_frag.fs" />

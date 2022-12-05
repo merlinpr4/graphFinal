@@ -82,6 +82,18 @@
     <None Include="shadLight.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="manyLights.fs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="manyLights.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="mat.fs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="mat.vs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png">
