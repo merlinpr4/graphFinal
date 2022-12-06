@@ -1,4 +1,6 @@
-//code written with the help of LearnOpenGl 
+//code written with the help of LearnOpenGl attempt at combining materials and lighting together but it failed
+// either learn specular maps or fix this
+// or use the combination of 2 shaders 
 #version 330 core
 out vec4 FragColor;
 
@@ -46,7 +48,9 @@ struct SpotLight {
 
 in vec2 TexCoords;
 in vec3 Normal;  
-in vec3 FragPos;  
+in vec3 FragPos;
+
+#define NR_POINT_LIGHTS 4
 
 uniform vec3 viewPos; 
 uniform Material material;
@@ -57,7 +61,7 @@ uniform SpotLight spotLight;
 uniform sampler2D texture_diffuse1;
 
 
-#define NR_POINT_LIGHTS 4
+
 
 // function prototypes
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
