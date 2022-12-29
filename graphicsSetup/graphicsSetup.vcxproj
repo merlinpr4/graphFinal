@@ -146,16 +146,12 @@
     <None Include="backpack\backpack.mtl" />
     <None Include="lightBox.fs" />
     <None Include="lightBox.vs" />
-    <None Include="light.fs" />
-    <None Include="light.vs" />
     <None Include="manyLights.fs" />
     <None Include="manyLights.vs" />
     <None Include="shad.fs" />
     <None Include="shad.vs" />
     <None Include="shader_frag.fs" />
     <None Include="shader_vert.vs" />
-    <None Include="shadLight.fs" />
-    <None Include="shadLight.vs" />
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
   </ItemGroup>

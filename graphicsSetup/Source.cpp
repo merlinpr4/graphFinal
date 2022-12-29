@@ -80,16 +80,17 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
+    //enable fog
+
 
     // build and compile shaders
     // -------------------------
-    Shader ourShader("shadLight.vs", "shadLight.fs");
-    Shader hatShader("shad.vs", "shad.fs");
-
-
+    //shaders that work for material properties
+    Shader matShader("shad.vs", "shad.fs");
     Shader skyboxShader("skybox.vs","skybox.fs");
 
    // Shader lightingShader("light.vs", "light.fs");
+    //multiple light source shaders
     Shader lightingShader("manyLights.vs", "manyLights.fs");
     Shader lightCubeShader("lightBox.vs","lightBox.fs");
 
@@ -389,54 +390,23 @@ int main()
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-    
-      
-        ourShader.use();
-       
-        ourShader.setVec3("viewPos", camera.Position);
-        ourShader.setMat4("projection", projection);
-        ourShader.setMat4("view", view);
-        
-        
-        // directional light
-        ourShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        ourShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-        ourShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-        ourShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-        ourShader.setVec3("spotLight.position", camera.Position);
-        ourShader.setVec3("spotLight.direction", camera.Front);
-        ourShader.setVec3("spotLight.ambient", 0.5f, 0.5f, 0.5f);
-        ourShader.setVec3("spotLight.diffuse", 1.0f, .9f, .9f);
-        ourShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-        ourShader.setFloat("spotLight.constant", 1.0f);
-        ourShader.setFloat("spotLight.linear", 0.08f);
-        ourShader.setFloat("spotLight.quadratic", 0.040f);
-        ourShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.0f)));
-        ourShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(14.0f)));
-
-
-        ourShader.setVec3("material.ambient", 1.0f, 1.0f, 1.00f);
-        ourShader.setVec3("material.diffuse", 1.0f, 1.0f, 1.0f);
-        ourShader.setVec3("material.specular", 1.0f, 1.0f, 1.0f); // figure out colour later for snow
-        ourShader.setFloat("material.shininess", 12.0f);
-      
+     
         //uses old material shader that only has directional lights
-        hatShader.use();
-        hatShader.setVec3("light.position", lightPos);
-        hatShader.setVec3("viewPos", camera.Position);
-        hatShader.setMat4("projection", projection);
-        hatShader.setMat4("view", view);
+        matShader.use();
+        matShader.setVec3("light.position", lightPos);
+        matShader.setVec3("viewPos", camera.Position);
+        matShader.setMat4("projection", projection);
+        matShader.setMat4("view", view);
 
-        hatShader.setVec3("light.ambient", ambientColor);
-        hatShader.setVec3("light.diffuse", diffuseColor);
-        hatShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        matShader.setVec3("light.ambient", ambientColor);
+        matShader.setVec3("light.diffuse", diffuseColor);
+        matShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         // material properties
-        hatShader.setVec3("material.ambient", 0.1745f, 0.01175f, 0.01175f);
-        hatShader.setVec3("material.diffuse", 0.61424f, 0.04136f, 0.04136f);
-        hatShader.setVec3("material.specular", 0.727811f, 0.626959f, 0.626959f);
-        hatShader.setFloat("material.shininess", 0.6f);
+        matShader.setVec3("material.ambient", 0.1745f, 0.01175f, 0.01175f);
+        matShader.setVec3("material.diffuse", 0.61424f, 0.04136f, 0.04136f);
+        matShader.setVec3("material.specular", 0.727811f, 0.626959f, 0.626959f);
+        matShader.setFloat("material.shininess", 0.6f);
        
 
         //render the floor
@@ -512,15 +482,12 @@ int main()
         rightArm4 = glm::rotate(rightArm4, cos((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
 
 
-
-
         glm::mat4 modelSnowman5 = glm::mat4(1.0f);
         modelSnowman5 = glm::translate(modelSnowman5, glm::vec3(5.0f, -.7f, -10 + (cos((float)glfwGetTime()) * 5)));
 
-      //  ourShader.use();
         lightingShader.use();
         lightingShader.setMat4("model", modelFloor);
-        floor.Draw(ourShader);
+        floor.Draw(lightingShader);
 
        
         lightingShader.setMat4("model", modelBody);
@@ -535,12 +502,12 @@ int main()
         lightingShader.setMat4("model", modelBody * leftArm);
         armLeft.Draw(lightingShader);
 
-        hatShader.use();
-        hatShader.setMat4("model", modelBody* modelHat);
-        hat.Draw(hatShader);
+        matShader.use();
+        matShader.setMat4("model", modelBody* modelHat);
+        hat.Draw(matShader);
    
-        hatShader.setMat4("model", modelBody * modelSnowman3);
-        snowManBasic.Draw(hatShader);
+        matShader.setMat4("model", modelBody * modelSnowman3);
+        snowManBasic.Draw(matShader);
 
         //crowd of snowman 
         //ourShader.use(); //testing other shader that is meant to combine material and light failure at the moment
@@ -557,7 +524,7 @@ int main()
 
 
         lightingShader.use();
-        ourShader.setMat4("model", modelBody * modelSnowman4);
+        lightingShader.setMat4("model", modelBody * modelSnowman4);
 
         lightingShader.setMat4("model", modelBody* modelSnowman4* leftArm4);
         basicLeft.Draw(lightingShader);
@@ -565,19 +532,19 @@ int main()
         lightingShader.setMat4("model", modelBody* modelSnowman4* rightArm4);
         basicRight.Draw(lightingShader);
 
-        snowManBasic.Draw(ourShader);
+        snowManBasic.Draw(lightingShader);
 
 
-        ourShader.setMat4("model", modelMountain);
+        lightingShader.setMat4("model", modelMountain);
       //  mountain.Draw(ourShader);
 
 
-        ourShader.setMat4("model", modelTree);
+        lightingShader.setMat4("model", modelTree);
       //  tree.Draw(ourShader);
 
       
-        ourShader.setMat4("model", modelBody* modelSnowman5);
-        snowManBasic.Draw(ourShader);
+        lightingShader.setMat4("model", modelBody* modelSnowman5);
+        snowManBasic.Draw(lightingShader);
 
      //   ourShader.setMat4("model", modelRobin);
     //    robin.Draw(ourShader);
