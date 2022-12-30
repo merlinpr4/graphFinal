@@ -271,7 +271,7 @@ int main()
     Model basicRight("snowManMatt/snowmanBasicRight.obj");
 
     //tree model if crash reduce poly count
-    //Model tree("floorModel/tree.obj");
+    Model tree("floorModel/tree2.obj");
 
 
    // Model ourModel("snowManMatt/snowmanScary.obj");
@@ -543,7 +543,7 @@ int main()
 
 
         lightingShader.setMat4("model", modelTree);
-      //  tree.Draw(ourShader);
+        tree.Draw(lightingShader);
 
       
         lightingShader.setMat4("model", modelBody* modelSnowman5);
