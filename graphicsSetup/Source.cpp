@@ -19,11 +19,11 @@ void processInput(GLFWwindow* window);
 unsigned int loadCubemap(vector<std::string> faces);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 900;
+const unsigned int SCR_HEIGHT = 500;
 
 // camera
-Camera camera(glm::vec3(0.0f, 2.0f, 3.0f)); //starting position for camera
+Camera camera(glm::vec3(1.0f, 2.0f, 3.0f)); //starting position for camera
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -449,7 +449,7 @@ int main()
 
         glm::mat4 modelTree = glm::mat4(1.0f);
         modelTree = glm::translate(modelTree, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelTree = glm::scale(modelTree, glm::vec3(0.25f, 0.25f, 0.25f));
+        modelTree = glm::scale(modelTree, glm::vec3(0.5f, 0.5f, 0.5f));
 
        
         //snowman Crowd connected to modelBody
