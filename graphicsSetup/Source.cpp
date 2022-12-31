@@ -259,7 +259,7 @@ int main()
     Model armRight("snowManMatt/rightArm.obj");
     Model armLeft("snowManMatt/leftArm.obj");
     Model hat("snowManMatt/hat.obj");
-    Model floor("floorModel/snowFloor.obj");
+    Model floor("floorModel/ground.obj");
 
    // Model mountain("floorModel/mountain.obj");
 
@@ -271,7 +271,7 @@ int main()
     Model basicRight("snowManMatt/snowmanBasicRight.obj");
 
     //tree model if crash reduce poly count
-    Model tree("floorModel/tree2.obj");
+    Model tree("floorModel/SnowTree.obj");
 
 
    // Model ourModel("snowManMatt/snowmanScary.obj");
