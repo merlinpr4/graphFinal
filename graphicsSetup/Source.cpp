@@ -249,37 +249,23 @@ int main()
     skyboxShader.setInt("skybox", 0);
 
     // load models
-    // -----------
-    //Model ourModel("backpack/backpack.obj");
-   // Model ourModel("C:/Users/thoma/Desktop/GraphicsSetup/graphicsSetup/graphicsSetup/backpack/backpack.obj");
-   // Model ourModel("backpack/backpack.obj");
-    //Model ourModel("C:/Users/thoma/Documents/Merlin college - 4th yr/graphics/snowManMatt/snowmanScary.obj");
 
+    //floor and presents
+    Model floor("floorModel/ground.obj");
+    Model prez("floorModel/prez.obj");
+
+    
     Model ourModel("snowManMatt/noArmsNoHat.obj");
     Model armRight("snowManMatt/rightArm.obj");
     Model armLeft("snowManMatt/leftArm.obj");
     Model hat("snowManMatt/hat.obj");
-    Model floor("floorModel/ground.obj");
-
-   // Model mountain("floorModel/mountain.obj");
-
-   // Model robin("models/robin2.obj");
-
-    //snowmanNoHierachy model
-    Model snowManBasic("snowManMatt/snowmanBasic.obj"); //snowmanScary is the model with both arms
+   
+    //snowmanHierachy model
+    Model snowManBasic("snowManMatt/snowmanBasic.obj"); //snowmanBasic is the model with no arms
     Model basicLeft("snowManMatt/snowmanBasicLeft.obj");
     Model basicRight("snowManMatt/snowmanBasicRight.obj");
 
-    //tree model if crash reduce poly count
-    Model tree("floorModel/SnowTree.obj");
-
-
-   // Model ourModel("snowManMatt/snowmanScary.obj");
-    //Model ourModel("C:/Users/thoma/Desktop/snowManMatt/snowmanScary.obj");
-
-    // draw in wireframe
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+    
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -389,12 +375,9 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-
      
-        //uses old material shader that only has directional lights
         matShader.use();
         matShader.setVec3("light.position", lightPos);
         matShader.setVec3("viewPos", camera.Position);
@@ -411,30 +394,33 @@ int main()
         matShader.setVec3("material.specular", 0.727811f, 0.626959f, 0.626959f);
         matShader.setFloat("material.shininess", 0.6f);
        
-
         //render the floor
         glm::mat4 modelFloor = glm::mat4(1.0f);
         modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
         modelFloor = glm::scale(modelFloor, glm::vec3(0.25f, 0.25f, 0.25f));
 
-        // render the loaded model base
-        glm::mat4 modelBody = glm::mat4(1.0f);
-        modelBody = glm::translate(modelBody, glm::vec3(0.0f, 0.0f, cos((float)glfwGetTime()) * 2)); // translate it down so it's at the center of the scene
-        modelBody = glm::scale(modelBody, glm::vec3(0.10f, 0.10f, 0.10f));	// it's a bit too big for our scene, so scale it down
-     //   modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 6, glm::vec3(1.0f, 0.0f, 0.0f));
+        //present model
+        glm::mat4 modelPrez = glm::mat4(1.0f);
+        modelPrez = glm::translate(modelPrez, glm::vec3(0.0f, 0.0f, 0.0f));
+        modelPrez = glm::scale(modelPrez, glm::vec3(0.25f, 0.25f, 0.25f));
 
+        // render the loaded snowman model base
+        glm::mat4 modelBody = glm::mat4(1.0f);
+        modelBody = glm::translate(modelBody, glm::vec3(0.0f, 0.0f, cos((float)glfwGetTime()) * 2)); // making it move around the scene
+        modelBody = glm::scale(modelBody, glm::vec3(0.10f, 0.10f, 0.10f));	
+     //   modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 6, glm::vec3(1.0f, 0.0f, 0.0f));
 
         //render the rightArm 
         glm::mat4 rightArm = glm::mat4(1.0f);
         rightArm = glm::translate(rightArm, glm::vec3(0.2f, 0.0f, 0.0f));
         rightArm = glm::scale(rightArm, glm::vec3(1.0f, 1.0f, 1.0f));
-        rightArm = glm::rotate(rightArm, cos((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
+        rightArm = glm::rotate(rightArm, cos((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f)); //moving arm
 
         //render the leftArm 
         glm::mat4 leftArm = glm::mat4(1.0f);
         leftArm = glm::translate(leftArm, glm::vec3(-0.2f, 0.0f, .5f));
         leftArm = glm::scale(leftArm, glm::vec3(1.0f, 1.0f, 1.0f));
-        leftArm = glm::rotate(leftArm, sin((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
+        leftArm = glm::rotate(leftArm, sin((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f)); 
 
         //render the hat 
         glm::mat4 modelHat = glm::mat4(1.0f);
@@ -442,65 +428,45 @@ int main()
         modelHat = glm::scale(modelHat, glm::vec3(1.0f, 1.0f, 1.0f));
         modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.0f, 0.1f));      
 
-        glm::mat4 modelMountain = glm::mat4(1.0f);
-        modelMountain = glm::translate(modelMountain, glm::vec3(0.0f, -5.0f, 0.0f));
-        modelMountain = glm::scale(modelMountain, glm::vec3(0.25f, 0.25f, 0.25f));
-
-
-        glm::mat4 modelTree = glm::mat4(1.0f);
-        modelTree = glm::translate(modelTree, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelTree = glm::scale(modelTree, glm::vec3(0.5f, 0.5f, 0.5f));
-
-       
         //snowman Crowd connected to modelBody
-
         glm::mat4 modelSnowman2 = glm::mat4(1.0f);
-        modelSnowman2 = glm::translate(modelSnowman2, glm::vec3(10.0f, 0.0f, 1.0f)); // translate it down so it's at the center of the scene
-
-        //render the leftArm of the basic 
+        modelSnowman2 = glm::translate(modelSnowman2, glm::vec3(10.0f, 0.0f, 1.0f));
         glm::mat4 leftArm2 = glm::mat4(1.0f);
         leftArm2 = glm::translate(leftArm2, glm::vec3(-0.2f, 0.0f, .5f));
-        leftArm2 = glm::rotate(leftArm2, sin((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
-
-        //render the rightArm 
         glm::mat4 rightArm2 = glm::mat4(1.0f);
         rightArm2 = glm::translate(rightArm2, glm::vec3(0.2f, 0.0f, 0.0f));
-        rightArm2 = glm::rotate(rightArm2, cos((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
 
-        
         glm::mat4 modelSnowman3 = glm::mat4(1.0f);
-        modelSnowman3 = glm::translate(modelSnowman3, glm::vec3(20.0f, 0.0f, (cos((float)glfwGetTime()) * 5)));
+        modelSnowman3 = glm::translate(modelSnowman3, glm::vec3(20.0f, 0.0f, 0.0f));
+        glm::mat4 leftArm3 = glm::mat4(1.0f);
+        leftArm3 = glm::translate(leftArm3, glm::vec3(-0.2f, 0.0f, .5f));
+        glm::mat4 rightArm3 = glm::mat4(1.0f);
+        rightArm3 = glm::translate(rightArm3, glm::vec3(0.2f, 0.0f, 0.0f));
        
         glm::mat4 modelSnowman4 = glm::mat4(1.0f);
-        modelSnowman4 = glm::translate(modelSnowman4, glm::vec3(15.0f, -.6f, -10+ (cos((float)glfwGetTime()) * 5)));
-
-        //render the leftArm of the basic 
+        modelSnowman4 = glm::translate(modelSnowman4, glm::vec3(15.0f, -.6f, -10));
         glm::mat4 leftArm4 = glm::mat4(1.0f);
         leftArm4 = glm::translate(leftArm4, glm::vec3(-0.2f, 0.0f, .5f));
-        leftArm4 = glm::rotate(leftArm4, sin((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
-
-        //render the rightArm 
         glm::mat4 rightArm4 = glm::mat4(1.0f);
         rightArm4 = glm::translate(rightArm4, glm::vec3(0.2f, 0.0f, 0.0f));
-        rightArm4 = glm::rotate(rightArm4, cos((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f));
-
-
+ 
         glm::mat4 modelSnowman5 = glm::mat4(1.0f);
-        modelSnowman5 = glm::translate(modelSnowman5, glm::vec3(5.0f, -.7f, -10 + (cos((float)glfwGetTime()) * 5)));
+        modelSnowman5 = glm::translate(modelSnowman5, glm::vec3(5.0f, -.7f, -10));
+        glm::mat4 leftArm5 = glm::mat4(1.0f);
+        leftArm5 = glm::translate(leftArm5, glm::vec3(-0.2f, 0.0f, .5f));
+        glm::mat4 rightArm5 = glm::mat4(1.0f);
+        rightArm5 = glm::translate(rightArm5, glm::vec3(0.2f, 0.0f, 0.0f));
 
         lightingShader.use();
         lightingShader.setMat4("model", modelFloor);
         floor.Draw(lightingShader);
 
-       
         lightingShader.setMat4("model", modelBody);
         ourModel.Draw(lightingShader);
 
         //right arm moves along with the body
-        //ourShader.use();
         lightingShader.setMat4("model", modelBody * rightArm);
         armRight.Draw(lightingShader);
-
         //left arn moves along with the body
         lightingShader.setMat4("model", modelBody * leftArm);
         armLeft.Draw(lightingShader);
@@ -508,52 +474,46 @@ int main()
         matShader.use();
         matShader.setMat4("model", modelBody* modelHat);
         hat.Draw(matShader);
-   
-        matShader.setMat4("model", modelBody * modelSnowman3);
-        snowManBasic.Draw(matShader);
 
-        //crowd of snowman 
-        //ourShader.use(); //testing other shader that is meant to combine material and light failure at the moment
+        //presents to show different materials
+        lightingShader.setMat4("model", modelPrez);
+        prez.Draw(matShader);
+
+        //crowd of snowman  
         lightingShader.use();
         lightingShader.setMat4("model", modelBody * modelSnowman2);
         snowManBasic.Draw(lightingShader);
 
-        lightingShader.setMat4("model", modelBody * modelSnowman2* leftArm2);
+        lightingShader.setMat4("model", modelBody * modelSnowman2* leftArm2 * rightArm);
         basicLeft.Draw(lightingShader);
 
-        lightingShader.setMat4("model", modelBody* modelSnowman2* rightArm2);
+        lightingShader.setMat4("model", modelBody* modelSnowman2* rightArm2 *rightArm);
         basicRight.Draw(lightingShader);
 
-
+        lightingShader.setMat4("model", modelBody* modelSnowman3);
+        snowManBasic.Draw(matShader);
+        lightingShader.setMat4("model", modelBody* modelSnowman3* leftArm3* rightArm);
+        basicLeft.Draw(lightingShader);
+        lightingShader.setMat4("model", modelBody* modelSnowman3* rightArm3* rightArm);
+        basicRight.Draw(lightingShader);
 
         lightingShader.use();
         lightingShader.setMat4("model", modelBody * modelSnowman4);
-
-        lightingShader.setMat4("model", modelBody* modelSnowman4* leftArm4);
-        basicLeft.Draw(lightingShader);
-
-        lightingShader.setMat4("model", modelBody* modelSnowman4* rightArm4);
-        basicRight.Draw(lightingShader);
-
         snowManBasic.Draw(lightingShader);
-
-
-        lightingShader.setMat4("model", modelMountain);
-      //  mountain.Draw(ourShader);
-
-
-        lightingShader.setMat4("model", modelTree);
-        tree.Draw(lightingShader);
-
-      
+        lightingShader.setMat4("model", modelBody* modelSnowman4 * leftArm * leftArm4);
+        basicLeft.Draw(lightingShader);
+        lightingShader.setMat4("model", modelBody* modelSnowman4 * leftArm * rightArm4);
+        basicRight.Draw(lightingShader);
+     
         lightingShader.setMat4("model", modelBody* modelSnowman5);
         snowManBasic.Draw(lightingShader);
+        lightingShader.setMat4("model", modelBody* modelSnowman5 * leftArm* leftArm5);
+        basicLeft.Draw(lightingShader);
+        lightingShader.setMat4("model", modelBody* modelSnowman5 * leftArm* rightArm5);
+        basicRight.Draw(lightingShader);
 
-     //   ourShader.setMat4("model", modelRobin);
-    //    robin.Draw(ourShader);
-
-
-         // draw skybox as last
+      
+         // draw skybox 
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.use();
         view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
