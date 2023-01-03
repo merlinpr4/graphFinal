@@ -56,9 +56,7 @@ void main()
   //direct light
   FragColor = texture(texture_diffuse1, TexCoords) * vec4(result, 1.0) ;
 
-  
-
-
+ 
      if(fog)
     {
     FragColor = vec4(result, 1.0);

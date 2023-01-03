@@ -80,6 +80,9 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
+
+   
+
     // build and compile shaders
     // -------------------------
     //shaders that work for material properties
@@ -463,6 +466,11 @@ int main()
         glBindVertexArray(0);
         glDepthFunc(GL_LESS); // set depth function back to default
 
+        //enable gamma correction disable for a darker scene
+            glEnable(GL_FRAMEBUFFER_SRGB);
+        
+       
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -477,6 +485,7 @@ int main()
 
     glfwTerminate();
     return 0;
+    
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
