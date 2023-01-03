@@ -39,6 +39,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+//creating the sound engine to play music
+ISoundEngine* music = createIrrKlangDevice();
+
 // lighting
 //directional light Position
 glm::vec3 lightPos(1.2f, 3.0f, 2.0f);
@@ -190,16 +193,15 @@ int main()
     Model basicLeft("snowManMatt/snowmanBasicLeft.obj");
     Model basicRight("snowManMatt/snowmanBasicRight.obj");
 
-    ISoundEngine* engine = createIrrKlangDevice();
-    if (!engine)
+   
+    if (!music)
     {
         printf("Could not startup engine\n");
         return 0; // error starting up the engine
     }
 
-    // To play a sound, we only to call play2D(). The second parameter
-    // tells the engine to play it looped.
-    engine->play2D("music/morning.mp3", true);
+   
+    music->play2D("music/morning.mp3", true);
 
     // In a loop, wait until user presses 'q' to exit or another key to
     // play another sound.
@@ -489,6 +491,7 @@ int main()
             glEnable(GL_FRAMEBUFFER_SRGB);
         }
         else {
+         
             glDisable(GL_FRAMEBUFFER_SRGB);
         }
             
@@ -532,6 +535,8 @@ void processInput(GLFWwindow* window)
     {
         fog = !fog;
         fogKey = true;
+
+        music->play2D("music/beep.mp3");
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
     {
