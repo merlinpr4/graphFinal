@@ -21,9 +21,12 @@ unsigned int loadCubemap(vector<std::string> faces);
 // settings
 const unsigned int SCR_WIDTH = 900;
 const unsigned int SCR_HEIGHT = 500;
+//variables to control fog
+bool fog = false;
+bool fogKey = false;
 
 // camera
-Camera camera(glm::vec3(1.0f, 2.0f, 3.0f)); //starting position for camera
+Camera camera(glm::vec3(0.0f, 2.0f, 3.0f)); //starting position for camera
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -203,6 +206,7 @@ int main()
         lightingShader.use();
         lightingShader.setFloat("material.shininess", 32.0f);
         lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader.setInt("fog", fog);
 
         // point light 1
         lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
@@ -277,6 +281,7 @@ int main()
         matShader.setVec3("viewPos", camera.Position);
         matShader.setMat4("projection", projection);
         matShader.setMat4("view", view);
+        matShader.setInt("fog", fog);
 
         matShader.setVec3("light.ambient", ambientColor);
         matShader.setVec3("light.diffuse", diffuseColor);
@@ -489,6 +494,16 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !fogKey)
+    {
+        fog = !fog;
+        fogKey = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+    {
+        fogKey = false;
+    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

@@ -24,6 +24,7 @@ in vec3 FragPos;
 uniform vec3 viewPos; 
 uniform Material material;
 uniform Light light;
+uniform bool fog;
 
 uniform sampler2D texture_diffuse1;
 
@@ -40,27 +41,42 @@ void main()
     
     // specular
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * (spec * material.specular);  
 
+    //blinn phong
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    float spec = pow(max(dot(norm, halfwayDir), 0.0), material.shininess);
+
+    //normal
+    //vec3 reflectDir = reflect(-lightDir, norm);  
+    //float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+
+    vec3 specular = light.specular * (spec * material.specular);  
     vec3 result = (ambient + diffuse + specular) ;
         
   //direct light
   FragColor = texture(texture_diffuse1, TexCoords) * vec4(result, 1.0) ;
 
   
-    // Fog parameters, could make them uniforms and pass them into the fragment shader
+
+
+     if(fog)
+    {
+    FragColor = vec4(result, 1.0);
     float fogMax = 10.0;
     float fogDensity = 0.60 ;
     vec4  fogColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     // Calculate fog
-                    //distance from pixel to camera
+    //distance from pixel to camera
     float dist = length(FragPos.xyz - viewPos.xyz);
     //exponential squared fog
     float distRatio = 4.0 * dist/fogMax ;
     float fogFactor = exp(-distRatio * fogDensity * distRatio * fogDensity);
-    FragColor = mix(fogColor, FragColor, fogFactor);
+        FragColor = mix(fogColor, FragColor, fogFactor);
+    }
+    else 
+    {      
+    FragColor = vec4(result, 1.0);
+    }
   
 }
