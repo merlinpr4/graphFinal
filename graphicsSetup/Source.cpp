@@ -12,6 +12,10 @@
 
 #include <iostream>
 
+//audio library
+#include <irrklang/irrKlang.h>
+using namespace irrklang;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -186,6 +190,19 @@ int main()
     Model basicLeft("snowManMatt/snowmanBasicLeft.obj");
     Model basicRight("snowManMatt/snowmanBasicRight.obj");
 
+    ISoundEngine* engine = createIrrKlangDevice();
+    if (!engine)
+    {
+        printf("Could not startup engine\n");
+        return 0; // error starting up the engine
+    }
+
+    // To play a sound, we only to call play2D(). The second parameter
+    // tells the engine to play it looped.
+    engine->play2D("music/morning.mp3", true);
+
+    // In a loop, wait until user presses 'q' to exit or another key to
+    // play another sound.
     
     // render loop
     // -----------
@@ -467,7 +484,14 @@ int main()
         glDepthFunc(GL_LESS); // set depth function back to default
 
         //enable gamma correction disable for a darker scene
+        if (!fog)
+        {
             glEnable(GL_FRAMEBUFFER_SRGB);
+        }
+        else {
+            glDisable(GL_FRAMEBUFFER_SRGB);
+        }
+            
         
        
 
