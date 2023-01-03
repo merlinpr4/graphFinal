@@ -84,7 +84,7 @@ void main()
     {
     FragColor = vec4(result, 1.0);
     float fogMax = 10.0;
-    float fogDensity = 0.60 ;
+    float fogDensity = 0.30 ;
     vec4  fogColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     // Calculate fog
