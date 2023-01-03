@@ -33,8 +33,8 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-//glm::vec3 lightPos(11.0f, 2.0f, 2.0f);
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+//directional light Position
+glm::vec3 lightPos(1.2f, 3.0f, 2.0f);
 int main()
 {
     // glfw: initialize and configure
@@ -79,11 +79,6 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-
-
-
-
-
 
 
     // build and compile shaders
@@ -147,7 +142,7 @@ int main()
     
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
-        glm::vec3(0.7f,  4.2f,  2.0f),
+        glm::vec3(-24.21f,  5.19f,  .90f),
         glm::vec3(2.3f, 3.3f, -4.0f),
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3(10.0f,  4.0f, -3.0f)
@@ -237,12 +232,12 @@ int main()
 
     vector<std::string> faces
     {
-        "nightSky/right.jpg",
-        "nightSky/left.jpg",
-        "nightSky/top.jpg",
-        "nightSky/bottom.jpg",
-        "nightSky/front.jpg",
-        "nightSky/back.jpg"
+        "sky/right.jpg",
+        "sky/left.jpg",
+        "sky/top.jpg",
+        "sky/bottom.jpg",
+        "sky/front.jpg",
+        "sky/back.jpg"
     };
     unsigned int cubemapTexture = loadCubemap(faces);
     skyboxShader.use();
@@ -285,19 +280,9 @@ int main()
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-       
         lightingShader.use();
         lightingShader.setFloat("material.shininess", 32.0f);
         lightingShader.setVec3("viewPos", camera.Position);
-
-         // light properties
-        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-
-        glm::vec3 lightPosD(11.0f, 2.0f, 2.0f);
-        //move light around
-        lightPosD.x = 8.0f;//+ sin(glfwGetTime()) * 2.0f;
 
         // point light 1
         lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
@@ -345,6 +330,18 @@ int main()
         lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.0f)));
         lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(14.0f)));
         
+        // directional light
+
+        // light properties
+        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); 
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); 
+
+        lightingShader.setVec3("dirLight.direction", lightPos);
+        lightingShader.setVec3("dirLight.ambient", ambientColor);
+        lightingShader.setVec3("dirLight.diffuse", diffuseColor);
+        lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -387,28 +384,38 @@ int main()
         matShader.setVec3("light.ambient", ambientColor);
         matShader.setVec3("light.diffuse", diffuseColor);
         matShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
-        // material properties
-        matShader.setVec3("material.ambient", 0.1745f, 0.01175f, 0.01175f);
-        matShader.setVec3("material.diffuse", 0.61424f, 0.04136f, 0.04136f);
-        matShader.setVec3("material.specular", 0.727811f, 0.626959f, 0.626959f);
-        matShader.setFloat("material.shininess", 0.6f);
-       
+  
         //render the floor
         glm::mat4 modelFloor = glm::mat4(1.0f);
         modelFloor = glm::translate(modelFloor, glm::vec3(0.0f, 0.0f, 0.0f));
         modelFloor = glm::scale(modelFloor, glm::vec3(0.25f, 0.25f, 0.25f));
 
-        //present model
+        //presents model 5 different presents to show material properties
         glm::mat4 modelPrez = glm::mat4(1.0f);
-        modelPrez = glm::translate(modelPrez, glm::vec3(0.0f, 0.0f, 0.0f));
+        modelPrez = glm::translate(modelPrez, glm::vec3(0.0f, 0.f, 0.0f));
         modelPrez = glm::scale(modelPrez, glm::vec3(0.25f, 0.25f, 0.25f));
+
+        glm::mat4 modelPrez2 = glm::mat4(1.0f);
+        modelPrez2 = glm::translate(modelPrez2, glm::vec3(0.0f, 0.02f, 0.3f));  //yzx
+        modelPrez2 = glm::scale(modelPrez2, glm::vec3(0.25f, 0.25f, 0.25f));
+
+        glm::mat4 modelPrez3 = glm::mat4(1.0f);
+        modelPrez3 = glm::translate(modelPrez3, glm::vec3(-0.1f, 0.0f, 0.30f));
+        modelPrez3 = glm::scale(modelPrez3, glm::vec3(0.3f, 0.25f, 0.3f));
+
+        glm::mat4 modelPrez4 = glm::mat4(1.0f);
+        modelPrez4 = glm::translate(modelPrez4, glm::vec3(0.05f, 0.08f, 0.20f));
+        modelPrez4 = glm::scale(modelPrez4, glm::vec3(0.25f, 0.25f, 0.3f));
+
+        glm::mat4 modelPrez5 = glm::mat4(1.0f);
+        modelPrez5 = glm::translate(modelPrez5, glm::vec3(0.1f, 0.0f, 0.0f));
+        modelPrez5 = glm::scale(modelPrez5, glm::vec3(0.3f, 0.25f, 0.3f));
 
         // render the loaded snowman model base
         glm::mat4 modelBody = glm::mat4(1.0f);
-        modelBody = glm::translate(modelBody, glm::vec3(0.0f, 0.0f, cos((float)glfwGetTime()) * 2)); // making it move around the scene
+        modelBody = glm::translate(modelBody, glm::vec3(0.0f, -0.3f, cos((float)glfwGetTime()) * 2)); // making it move around the scene
         modelBody = glm::scale(modelBody, glm::vec3(0.10f, 0.10f, 0.10f));	
-     //   modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 6, glm::vec3(1.0f, 0.0f, 0.0f));
+        modelBody = glm::rotate(modelBody, cos((float)glfwGetTime()) / 8, glm::vec3(1.0f, 0.0f, 1.0f));  //rotating body
 
         //render the rightArm 
         glm::mat4 rightArm = glm::mat4(1.0f);
@@ -422,13 +429,7 @@ int main()
         leftArm = glm::scale(leftArm, glm::vec3(1.0f, 1.0f, 1.0f));
         leftArm = glm::rotate(leftArm, sin((float)glfwGetTime()) / 3, glm::vec3(2.0f, 0.0f, 0.0f)); 
 
-        //render the hat 
-        glm::mat4 modelHat = glm::mat4(1.0f);
-        modelHat = glm::translate(modelHat, glm::vec3(0.0f, -0.1f, 0.0f));
-        modelHat = glm::scale(modelHat, glm::vec3(1.0f, 1.0f, 1.0f));
-        modelHat = glm::rotate(modelHat, cos((float)glfwGetTime()) / 15, glm::vec3(0.0f, 0.0f, 0.1f));      
-
-        //snowman Crowd connected to modelBody
+        //snowman Crowd connected to modelBody -----------------------------------------------------------------------------------
         glm::mat4 modelSnowman2 = glm::mat4(1.0f);
         modelSnowman2 = glm::translate(modelSnowman2, glm::vec3(10.0f, 0.0f, 1.0f));
         glm::mat4 leftArm2 = glm::mat4(1.0f);
@@ -457,47 +458,80 @@ int main()
         glm::mat4 rightArm5 = glm::mat4(1.0f);
         rightArm5 = glm::translate(rightArm5, glm::vec3(0.2f, 0.0f, 0.0f));
 
+        //Drawing Models ############################################################################################################################
+
         lightingShader.use();
         lightingShader.setMat4("model", modelFloor);
         floor.Draw(lightingShader);
 
-        lightingShader.setMat4("model", modelBody);
-        ourModel.Draw(lightingShader);
-
-        //right arm moves along with the body
-        lightingShader.setMat4("model", modelBody * rightArm);
-        armRight.Draw(lightingShader);
-        //left arn moves along with the body
-        lightingShader.setMat4("model", modelBody * leftArm);
-        armLeft.Draw(lightingShader);
-
+        //presents to show different materials --------------------------------------------------------------------------------
+        // 
         matShader.use();
-        matShader.setMat4("model", modelBody* modelHat);
-        hat.Draw(matShader);
-
-        //presents to show different materials
-        lightingShader.setMat4("model", modelPrez);
+        //gold
+        matShader.setVec3("material.ambient", 0.24725f, 0.1995f, 0.0745f);
+        matShader.setVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);
+        matShader.setVec3("material.specular", 0.628281f, 0.555802f, 0.366065f);
+        matShader.setFloat("material.shininess", 0.4f);
+        matShader.setMat4("model", modelPrez);
         prez.Draw(matShader);
 
-        //crowd of snowman  
+        //ruby
+        matShader.setVec3("material.ambient", 0.1745f, 0.01175f, 0.01175f);
+        matShader.setVec3("material.diffuse", 0.61424f, 0.04136f, 0.04136f);
+        matShader.setVec3("material.specular", 0.727811f, 0.626959f, 0.626959f);
+        matShader.setFloat("material.shininess", 0.6f);
+        matShader.setMat4("model", modelPrez2);
+        prez.Draw(matShader);
+
+        //emerald
+        matShader.setVec3("material.ambient", 0.0215f, 0.1745f, 0.0215f);
+        matShader.setVec3("material.diffuse", 0.07568, 0.61424, 0.07568);
+        matShader.setVec3("material.specular", 0.633, 0.727811, 0.633);
+        matShader.setFloat("material.shininess", 0.6f);
+        matShader.setMat4("model", modelPrez3);
+        prez.Draw(matShader);
+
+        //jade
+        matShader.setVec3("material.ambient", 0.19225, 0.19225, 0.19225);
+        matShader.setVec3("material.diffuse", 0.50754, 0.50754, 0.50754);
+        matShader.setVec3("material.specular", 0.508273, 0.508273, 0.508273);
+        matShader.setFloat("material.shininess", 0.4f);
+        matShader.setMat4("model", modelPrez4);
+        prez.Draw(matShader);
+
+        //bronze
+        matShader.setVec3("material.ambient", 0.2125, 0.1275, 0.054);
+        matShader.setVec3("material.diffuse", .714, 0.4284, 0.18144);
+        matShader.setVec3("material.specular", 0.393548, 0.271906, 0.166721);
+        matShader.setFloat("material.shininess", 0.2f);
+        matShader.setMat4("model", modelPrez5);
+        prez.Draw(matShader);
+
+        //crowd of snowman  hierachy connected to modelBody  ------------------------------------------------------------------------------------
         lightingShader.use();
-        lightingShader.setMat4("model", modelBody * modelSnowman2);
+        lightingShader.setMat4("model", modelBody);
         snowManBasic.Draw(lightingShader);
-
-        lightingShader.setMat4("model", modelBody * modelSnowman2* leftArm2 * rightArm);
-        basicLeft.Draw(lightingShader);
-
-        lightingShader.setMat4("model", modelBody* modelSnowman2* rightArm2 *rightArm);
-        basicRight.Draw(lightingShader);
+            //right arm moves along with the body
+            lightingShader.setMat4("model", modelBody* rightArm);
+            armRight.Draw(lightingShader);
+            //left arn moves along with the body
+            lightingShader.setMat4("model", modelBody* leftArm);
+            armLeft.Draw(lightingShader);
+     
+            lightingShader.setMat4("model", modelBody * modelSnowman2);
+            snowManBasic.Draw(lightingShader);
+            lightingShader.setMat4("model", modelBody * modelSnowman2* leftArm2 * rightArm);
+            armLeft.Draw(lightingShader);
+            lightingShader.setMat4("model", modelBody* modelSnowman2* rightArm2 *rightArm);
+            armRight.Draw(lightingShader);
 
         lightingShader.setMat4("model", modelBody* modelSnowman3);
-        snowManBasic.Draw(matShader);
+        snowManBasic.Draw(lightingShader);
         lightingShader.setMat4("model", modelBody* modelSnowman3* leftArm3* rightArm);
-        basicLeft.Draw(lightingShader);
+        armLeft.Draw(lightingShader);
         lightingShader.setMat4("model", modelBody* modelSnowman3* rightArm3* rightArm);
-        basicRight.Draw(lightingShader);
+        armRight.Draw(lightingShader);
 
-        lightingShader.use();
         lightingShader.setMat4("model", modelBody * modelSnowman4);
         snowManBasic.Draw(lightingShader);
         lightingShader.setMat4("model", modelBody* modelSnowman4 * leftArm * leftArm4);
@@ -512,8 +546,8 @@ int main()
         lightingShader.setMat4("model", modelBody* modelSnowman5 * leftArm* rightArm5);
         basicRight.Draw(lightingShader);
 
-      
-         // draw skybox 
+ 
+         // draw skybox ---------------------------------------------------------------------------------------------------------------------
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.use();
         view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix

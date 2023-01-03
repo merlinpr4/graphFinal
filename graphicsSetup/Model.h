@@ -1,4 +1,5 @@
-//code for model was taken from LeanOpenGL
+//code for model was taken from LeanOpenGL https://learnopengl.com/code_viewer_gh.php?code=src/3.model_loading/1.model_loading/model_loading.cpp
+
 #ifndef MODEL_H
 #define MODEL_H
 

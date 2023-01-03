@@ -49,12 +49,6 @@
     <None Include="shad.vs">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="shader_frag.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="shader_vert.vs">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="backpack\backpack.mtl">
       <Filter>Resource Files</Filter>
     </None>

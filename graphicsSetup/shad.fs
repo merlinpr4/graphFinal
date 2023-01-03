@@ -52,23 +52,15 @@ void main()
   
     // Fog parameters, could make them uniforms and pass them into the fragment shader
     float fogMax = 10.0;
-    float fogMin = 1.0;
     float fogDensity = 0.60 ;
     vec4  fogColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     // Calculate fog
                     //distance from pixel to camera
     float dist = length(FragPos.xyz - viewPos.xyz);
-  
     //exponential squared fog
     float distRatio = 4.0 * dist/fogMax ;
     float fogFactor = exp(-distRatio * fogDensity * distRatio * fogDensity);
-    
-    //linear fog code
-    //float fogFactor = (fogMax - dist) /
-     //                 (fogMax - fogMin);
-   // fogFactor = clamp(fogFactor, 0.0, 1.0);
-
     FragColor = mix(fogColor, FragColor, fogFactor);
   
 }

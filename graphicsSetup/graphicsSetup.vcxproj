@@ -150,8 +150,6 @@
     <None Include="manyLights.vs" />
     <None Include="shad.fs" />
     <None Include="shad.vs" />
-    <None Include="shader_frag.fs" />
-    <None Include="shader_vert.vs" />
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
   </ItemGroup>
