@@ -23,8 +23,8 @@ void processInput(GLFWwindow* window);
 unsigned int loadCubemap(vector<std::string> faces);
 
 // settings
-const unsigned int SCR_WIDTH = 900;
-const unsigned int SCR_HEIGHT = 500;
+const unsigned int SCR_WIDTH = 990;
+const unsigned int SCR_HEIGHT = 556;
 //variables to control fog
 bool fog = false;
 bool fogKey = false;
@@ -45,6 +45,10 @@ ISoundEngine* musicEngine = createIrrKlangDevice();
 // lighting
 //directional light Position
 glm::vec3 lightPos(1.2f, 3.0f, 2.0f);
+
+float ambient = 0.05f;
+float specular = 1.0f;
+float diffuse = .8f;
 int main()
 {
     // glfw: initialize and configure
@@ -87,8 +91,6 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-
-   
 
     // build and compile shaders
     // -------------------------
@@ -263,35 +265,36 @@ int main()
         lightingShader.setVec3("viewPos", camera.Position);
         lightingShader.setInt("fog", fog);
 
+
         // point light 1
         lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
-        lightingShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-        lightingShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("pointLights[0].ambient", ambient, ambient, ambient);
+        lightingShader.setVec3("pointLights[0].diffuse", diffuse, diffuse, diffuse);
+        lightingShader.setVec3("pointLights[0].specular", specular, specular, specular);
         lightingShader.setFloat("pointLights[0].constant", 1.0f);
         lightingShader.setFloat("pointLights[0].linear", 0.09f);
         lightingShader.setFloat("pointLights[0].quadratic", 0.032f);
         // point light 2
         lightingShader.setVec3("pointLights[1].position", pointLightPositions[1]);
-        lightingShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-        lightingShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("pointLights[1].ambient", ambient, ambient, ambient);
+        lightingShader.setVec3("pointLights[1].diffuse", diffuse, diffuse, diffuse);
+        lightingShader.setVec3("pointLights[1].specular", specular, specular, specular);
         lightingShader.setFloat("pointLights[1].constant", 1.0f);
         lightingShader.setFloat("pointLights[1].linear", 0.09f);
         lightingShader.setFloat("pointLights[1].quadratic", 0.032f);
         // point light 3
         lightingShader.setVec3("pointLights[2].position", pointLightPositions[2]);
-        lightingShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-        lightingShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("pointLights[2].ambient", ambient, ambient, ambient);
+        lightingShader.setVec3("pointLights[2].diffuse", diffuse, diffuse, diffuse);
+        lightingShader.setVec3("pointLights[2].specular", specular, specular, specular);
         lightingShader.setFloat("pointLights[2].constant", 1.0f);
         lightingShader.setFloat("pointLights[2].linear", 0.09f);
         lightingShader.setFloat("pointLights[2].quadratic", 0.032f);
         // point light 4
         lightingShader.setVec3("pointLights[3].position", pointLightPositions[3]);
-        lightingShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-        lightingShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("pointLights[3].ambient", ambient, ambient, ambient);
+        lightingShader.setVec3("pointLights[3].diffuse", diffuse, diffuse, diffuse);
+        lightingShader.setVec3("pointLights[3].specular", specular, specular, specular);
         lightingShader.setFloat("pointLights[3].constant", 1.0f);
         lightingShader.setFloat("pointLights[3].linear", 0.09f);
         lightingShader.setFloat("pointLights[3].quadratic", 0.032f);
@@ -300,9 +303,9 @@ int main()
         /**/
         lightingShader.setVec3("spotLight.position", camera.Position);
         lightingShader.setVec3("spotLight.direction", camera.Front);
-        lightingShader.setVec3("spotLight.ambient", 0.5f, 0.5f, 0.5f);
-        lightingShader.setVec3("spotLight.diffuse", 1.0f, .9f, .9f);
-        lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("spotLight.ambient", ambient, ambient, ambient);
+        lightingShader.setVec3("spotLight.diffuse", diffuse, diffuse, diffuse);
+        lightingShader.setVec3("spotLight.specular", specular, specular, specular);
         lightingShader.setFloat("spotLight.constant", 1.0f);
         lightingShader.setFloat("spotLight.linear", 0.08f);
         lightingShader.setFloat("spotLight.quadratic", 0.040f);
@@ -570,6 +573,25 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
 
+    //lighting controls
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+        ambient = ambient + .02f;
+
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+        ambient = ambient - .02f;
+    
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+        diffuse = diffuse + .02f;
+       
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+        diffuse = diffuse - .02f;
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        specular = specular + .02f;
+     
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        specular = specular - .02f;  
+       
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !fogKey)
     {
         fog = !fog;
