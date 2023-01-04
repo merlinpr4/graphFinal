@@ -40,7 +40,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 //creating the sound engine to play music
-ISoundEngine* music = createIrrKlangDevice();
+ISoundEngine* musicEngine = createIrrKlangDevice();
 
 // lighting
 //directional light Position
@@ -194,14 +194,44 @@ int main()
     Model basicRight("snowManMatt/snowmanBasicRight.obj");
 
    
-    if (!music)
+    if (!musicEngine)
     {
         printf("Could not startup engine\n");
         return 0; // error starting up the engine
     }
 
    
-    music->play2D("music/morning.mp3", true);
+    ISoundSource* backgroundMusic = musicEngine->addSoundSourceFromFile("music/morning.mp3");
+
+    backgroundMusic->setDefaultVolume(0.2f);
+    musicEngine->play2D(backgroundMusic,true);
+    
+ 
+    //some positional sound
+    vec3df crowdPosition(0, 0, 0);
+   
+    //crowd moving through snow sound
+    ISound* snowSound = musicEngine->play3D("music/snow.mp3", crowdPosition,true);
+    if (snowSound)
+    {
+        snowSound->setMinDistance(0.1f);
+        
+       // snowSound->setIsPaused(false);
+    }
+
+    //birds in the forest sound
+
+    //some positional sound
+    vec3df birdPosition(-5.0, 10, -30);
+
+    ISound* birdSound = musicEngine->play3D("music/birds.mp3", birdPosition, true);
+
+    if (birdSound)
+    {
+        birdSound->setMinDistance(0.2f);
+        // snowSound->setIsPaused(false);
+    }
+ 
 
     // In a loop, wait until user presses 'q' to exit or another key to
     // play another sound.
@@ -219,6 +249,9 @@ int main()
         // input
         // -----
         processInput(window);
+
+        musicEngine->setListenerPosition(vec3df(camera.Position.x, camera.Position.y, camera.Position.z), vec3df(0, 0, 1));
+
 
         // render
         // ------
@@ -510,7 +543,13 @@ int main()
     glDeleteVertexArrays(1, &skyboxVAO);
     glDeleteBuffers(1, &skyboxVBO);
 
+    if (musicEngine)
+    {
+        musicEngine->drop();
+    }
+
     glfwTerminate();
+   
     return 0;
     
 }
@@ -536,7 +575,7 @@ void processInput(GLFWwindow* window)
         fog = !fog;
         fogKey = true;
 
-        music->play2D("music/beep.mp3");
+        musicEngine->play2D("music/beep.mp3");
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
     {
