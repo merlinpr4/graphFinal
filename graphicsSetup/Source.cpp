@@ -30,7 +30,7 @@ using namespace irrklang;
 void framebufferSize(GLFWwindow* window, int width, int height);
 void mouse(GLFWwindow* window, double xpos, double ypos);
 void scroll(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window);
+void keyboardInput(GLFWwindow* window);
 unsigned int loadSkybox(vector<std::string> faces);
 
 // window settings
@@ -214,7 +214,7 @@ int main()
         dTime = current - last;
         last = current;
 
-        processInput(window);
+        keyboardInput(window);
 
         //listener position set to camera
         musicEngine->setListenerPosition(vec3df(camera.Position.x, camera.Position.y, camera.Position.z), vec3df(0, 0, 1));
@@ -277,10 +277,10 @@ int main()
         glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
         glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); 
         glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); 
-        lightingShader.setVec3("dirLight.direction", lightPos);
-        lightingShader.setVec3("dirLight.ambient", ambientColor);
-        lightingShader.setVec3("dirLight.diffuse", diffuseColor);
-        lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        lightingShader.setVec3("directLight.direction", lightPos);
+        lightingShader.setVec3("directLight.ambient", ambientColor);
+        lightingShader.setVec3("directLight.diffuse", diffuseColor);
+        lightingShader.setVec3("directLight.specular", 0.5f, 0.5f, 0.5f);
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         lightingShader.setMat4("projection", projection);
@@ -492,7 +492,7 @@ int main()
 }
 
 //keyboard controls function
-void processInput(GLFWwindow* window)
+void keyboardInput(GLFWwindow* window)
 {
     //camera and escape controls ---------------------------------------------------------------------------------------------------------------------------------------
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
