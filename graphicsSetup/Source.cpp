@@ -1,46 +1,46 @@
+/*
+This project was created by Merlin Prasad (Student number 19333557)
+It creates a winter wonderland scene of a forest in the early morning
+It implements all 3 required basic features (crowd,textures and lighting) and the following 6 advanced features : 
+1. Music using irrklang audio library
+2. Skybox 
+3. Handmade models
+4. Fog (implementation can be seen in manyLights.fs and shad.fs)
+5. Advanced lighting (Blinn-Phong and Gamma correction)
+6. Hierachal animated crowd
+
+I worked on this project by myself and used learnopengl https://learnopengl.com/Getting-started/OpenGL for help implementing my features
+Code references have been listed in the source files and report
+*/
 #define STB_IMAGE_IMPLEMENTATION
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 #include "shader.h"
 #include "Camera.h"
 #include "Model.h"
-
 #include <iostream>
 
 //audio library
 #include <irrklang/irrKlang.h>
 using namespace irrklang;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+//function declarations
+void framebufferSize(GLFWwindow* window, int width, int height);
+void mouse(GLFWwindow* window, double xpos, double ypos);
+void scroll(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 unsigned int loadCubemap(vector<std::string> faces);
 
-// settings
+// window settings
 const unsigned int SCR_WIDTH = 990;
 const unsigned int SCR_HEIGHT = 556;
+
 //variables to control fog
 bool fog = false;
 bool fogKey = false;
-
-// camera
-Camera camera(glm::vec3(0.0f, 2.0f, 3.0f)); //starting position for camera
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
-
-// timing
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
-//creating the sound engine to play music
-ISoundEngine* musicEngine = createIrrKlangDevice();
 
 // lighting
 //directional light Position
@@ -49,10 +49,22 @@ float ambient = 0.05f;
 float specular = 1.0f;
 float diffuse = .8f;
 
+// camera
+Camera camera(glm::vec3(0.0f, 2.0f, 3.0f)); //starting position for camera
+float lastXPos = SCR_WIDTH / 2.0f;
+float lastYPos = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
+
+// time
+float dTime = 0.0f;
+float last = 0.0f;
+
+//creating the sound engine to play music
+ISoundEngine* musicEngine = createIrrKlangDevice();
+
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
+    // initialisation
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -62,28 +74,23 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    // glfw window creation
-    // --------------------
+    // window creation
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "WinterWonderland", NULL, NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        std::cout << "Failed to create window :(" << std::endl;
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-
-    // tell GLFW to capture our mouse
+    glfwSetFramebufferSizeCallback(window, framebufferSize);
+    glfwSetCursorPosCallback(window, mouse);
+    glfwSetScrollCallback(window, scroll);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize GLAD :(" << std::endl;
         return -1;
     }
 
@@ -93,7 +100,7 @@ int main()
 
 
     // build and compile shaders
-    // -------------------------
+    // ---------------------------------------------------
     //shaders that work for material properties
     Shader matShader("shad.vs", "shad.fs");
     Shader skyboxShader("skybox.vs","skybox.fs");
@@ -108,6 +115,7 @@ int main()
         glm::vec3(10.0f,  4.0f, -3.0f)
     };
 
+    //Skybox setup------------------------------------------------------------------------------------------------
     //Skybox code reference https://learnopengl.com/Advanced-OpenGL/Cubemaps
     float skyboxVertices[] = {
         // positions          
@@ -218,23 +226,13 @@ int main()
     }
 
     //birds in the forest sound
-
-    //some positional sound
     vec3df birdPosition(-5.0, 10, -30);
-
     ISound* birdSound = musicEngine->play3D("music/birds.mp3", birdPosition, true);
-
     if (birdSound)
     {
         birdSound->setVolume(.08f);
         birdSound->setMinDistance(0.2f);
-
-        // snowSound->setIsPaused(false);
     }
- 
-
-    // In a loop, wait until user presses 'q' to exit or another key to
-    // play another sound.
     
     // render loop
     // -----------
@@ -242,19 +240,17 @@ int main()
     {
         // per-frame time logic
         // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        float current = static_cast<float>(glfwGetTime());
+        dTime = current - last;
+        last = current;
 
-        // input
-        // -----
         processInput(window);
 
+        //listener position set to camera
         musicEngine->setListenerPosition(vec3df(camera.Position.x, camera.Position.y, camera.Position.z), vec3df(0, 0, 1));
 
 
-        // render
-        // ------
+        // render-------------------------------------------------------------------------------------------
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -262,7 +258,6 @@ int main()
         lightingShader.setFloat("material.shininess", 32.0f);
         lightingShader.setVec3("viewPos", camera.Position);
         lightingShader.setInt("fog", fog);
-
 
         // point light 1
         lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
@@ -519,7 +514,7 @@ int main()
         glBindVertexArray(0);
         glDepthFunc(GL_LESS); // set depth function back to default
 
-        //enable gamma correction disable for a darker scene
+        //enable gamma correction disable for a darker scene------------------------------------------------------------------------------------------------
         if (!fog)
         {
             glEnable(GL_FRAMEBUFFER_SRGB);
@@ -528,19 +523,13 @@ int main()
          
             glDisable(GL_FRAMEBUFFER_SRGB);
         }
-            
-        
        
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
-
+    //delete resources
     glDeleteVertexArrays(1, &skyboxVAO);
     glDeleteBuffers(1, &skyboxVBO);
 
@@ -548,53 +537,46 @@ int main()
     {
         musicEngine->drop();
     }
-
     glfwTerminate();
-   
-    return 0;
-    
+  
+    return 0;  
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+//keyboard controls function
 void processInput(GLFWwindow* window)
 {
+    //camera and escape controls ---------------------------------------------------------------------------------------------------------------------------------------
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        camera.ProcessKeyboard(FORWARD, dTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(LEFT, dTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, dTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(RIGHT, dTime);
 
-    //lighting controls
+    //lighting controls ------------------------------------------------------------------------------------------------------------------------------------------------
     if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
         ambient = ambient + .02f;
-
     if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
         ambient = ambient - .02f;
-    
     if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
         diffuse = diffuse + .02f;
-       
     if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
         diffuse = diffuse - .02f;
-
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
         specular = specular + .02f;
-     
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
         specular = specular - .02f;  
        
+    //fog ---------------------------------------------------------------------------------------------------------------------------------------------------------------
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !fogKey)
     {
         fog = !fog;
         fogKey = true;
-
+        //play beep sound
         musicEngine->play2D("music/beep.mp3");
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
@@ -603,41 +585,32 @@ void processInput(GLFWwindow* window)
     }
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+//window Size changes
+void framebufferSize(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+// Mouse movement
+void mouse(GLFWwindow* window, double x, double y)
 {
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
-
+    float xPos = static_cast<float>(x);
+    float yPos = static_cast<float>(y);
     if (firstMouse)
     {
-        lastX = xpos;
-        lastY = ypos;
+        lastXPos = xPos;
+        lastYPos = yPos;
         firstMouse = false;
     }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
+    float xoffset = xPos - lastXPos;
+    float yoffset = lastYPos - yPos; 
+    lastXPos = xPos;
+    lastYPos = yPos;
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void scroll(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
