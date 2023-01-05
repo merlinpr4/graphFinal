@@ -1,4 +1,5 @@
-    #version 330 core
+//Lighting reference https://learnopengl.com/Lighting/Multiple-lights
+#version 330 core
 out vec4 FragColor;
 
 struct Material {

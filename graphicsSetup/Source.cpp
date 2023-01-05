@@ -45,10 +45,10 @@ ISoundEngine* musicEngine = createIrrKlangDevice();
 // lighting
 //directional light Position
 glm::vec3 lightPos(1.2f, 3.0f, 2.0f);
-
 float ambient = 0.05f;
 float specular = 1.0f;
 float diffuse = .8f;
+
 int main()
 {
     // glfw: initialize and configure
@@ -97,10 +97,8 @@ int main()
     //shaders that work for material properties
     Shader matShader("shad.vs", "shad.fs");
     Shader skyboxShader("skybox.vs","skybox.fs");
-
     //multiple light source shaders
     Shader lightingShader("manyLights.vs", "manyLights.fs");
-    
     
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
@@ -110,6 +108,7 @@ int main()
         glm::vec3(10.0f,  4.0f, -3.0f)
     };
 
+    //Skybox code reference https://learnopengl.com/Advanced-OpenGL/Cubemaps
     float skyboxVertices[] = {
         // positions          
         -1.0f,  1.0f, -1.0f,

@@ -1,5 +1,5 @@
 
-// Code for mesh was taken from https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/mesh.h
+// Code for mesh reference https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/mesh.h
 
 #ifndef MESH_H
 #define MESH_H

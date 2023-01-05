@@ -1,4 +1,4 @@
-//code was taken from LeanOpenGL
+//Camera reference https://learnopengl.com/Getting-started/Camera
 #ifndef CAMERA_H
 #define CAMERA_H
 
