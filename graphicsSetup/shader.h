@@ -16,34 +16,34 @@ public:
     Shader(const char* vertexPath, const char* fragmentPath)
     {
         // get the fragment and vertex code from path
-        std::string vertexCode;
-        std::string fragmentCode;
-        std::ifstream vShaderFile;
-        std::ifstream fShaderFile;
+        std::string vCode;
+        std::string fCode;
+        std::ifstream vShader;
+        std::ifstream fShader;
     
-        vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-        fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        vShader.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        fShader.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         try
         {
-            vShaderFile.open(vertexPath);
-            fShaderFile.open(fragmentPath);
+            vShader.open(vertexPath);
+            fShader.open(fragmentPath);
             std::stringstream vShaderStream, fShaderStream;
       
-            vShaderStream << vShaderFile.rdbuf();
-            fShaderStream << fShaderFile.rdbuf();
+            vShaderStream << vShader.rdbuf();
+            fShaderStream << fShader.rdbuf();
      
-            vShaderFile.close();
-            fShaderFile.close();
+            vShader.close();
+            fShader.close();
        
-            vertexCode = vShaderStream.str();
-            fragmentCode = fShaderStream.str();
+            vCode = vShaderStream.str();
+            fCode = fShaderStream.str();
         }
         catch (std::ifstream::failure& e)
         {
             std::cout << "ERROR::SHADER::FILE READ UNSUCCESSFULL :( : " << e.what() << std::endl;
         }
-        const char* vShaderCode = vertexCode.c_str();
-        const char* fShaderCode = fragmentCode.c_str();
+        const char* vShaderCode = vCode.c_str();
+        const char* fShaderCode = fCode.c_str();
         unsigned int vertex, fragment;
 
         // vertex 
