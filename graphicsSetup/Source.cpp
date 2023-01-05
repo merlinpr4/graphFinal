@@ -183,12 +183,8 @@ int main()
     //floor and presents
     Model floor("floorModel/ground.obj");
     Model prez("floorModel/prez.obj");
-
-    
-    Model ourModel("snowManMatt/noArmsNoHat.obj");
     Model armRight("snowManMatt/rightArm.obj");
     Model armLeft("snowManMatt/leftArm.obj");
-    Model hat("snowManMatt/hat.obj");
    
     //snowmanHierachy model
     Model snowManBasic("snowManMatt/snowmanBasic.obj"); //snowmanBasic is the model with no arms
@@ -205,7 +201,7 @@ int main()
    
     ISoundSource* backgroundMusic = musicEngine->addSoundSourceFromFile("music/morning.mp3");
 
-    backgroundMusic->setDefaultVolume(0.2f);
+    backgroundMusic->setDefaultVolume(0.08f);
     musicEngine->play2D(backgroundMusic,true);
     
  
@@ -216,9 +212,10 @@ int main()
     ISound* snowSound = musicEngine->play3D("music/snow.mp3", crowdPosition,true);
     if (snowSound)
     {
-        snowSound->setMinDistance(0.1f);
+        snowSound->setVolume(.006f);
+        snowSound->setMinDistance(0.05f);
         
-       // snowSound->setIsPaused(false);
+        snowSound->setIsPaused(false);
     }
 
     //birds in the forest sound
@@ -230,7 +227,9 @@ int main()
 
     if (birdSound)
     {
+        birdSound->setVolume(.08f);
         birdSound->setMinDistance(0.2f);
+
         // snowSound->setIsPaused(false);
     }
  
