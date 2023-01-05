@@ -143,27 +143,12 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="backpack\backpack.mtl" />
-    <None Include="lightBox.fs" />
-    <None Include="lightBox.vs" />
     <None Include="manyLights.fs" />
     <None Include="manyLights.vs" />
     <None Include="shad.fs" />
     <None Include="shad.vs" />
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="awesomeface.png" />
-    <Image Include="backpack\ao.jpg" />
-    <Image Include="backpack\diffuse.jpg" />
-    <Image Include="backpack\normal.png" />
-    <Image Include="backpack\roughness.jpg" />
-    <Image Include="backpack\specular.jpg" />
-    <Image Include="container.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="backpack\source_attribution.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resource Files\textures">
-      <UniqueIdentifier>{39a9424d-1a7e-4932-a8ad-8f6c8542ef93}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -49,19 +46,10 @@
     <None Include="shad.vs">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="backpack\backpack.mtl">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="skybox.vs">
       <Filter>Source Files</Filter>
     </None>
     <None Include="skybox.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="lightBox.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="lightBox.vs">
       <Filter>Source Files</Filter>
     </None>
     <None Include="manyLights.fs">
@@ -70,33 +58,5 @@
     <None Include="manyLights.vs">
       <Filter>Source Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="awesomeface.png">
-      <Filter>Resource Files\textures</Filter>
-    </Image>
-    <Image Include="container.jpg">
-      <Filter>Resource Files\textures</Filter>
-    </Image>
-    <Image Include="backpack\ao.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="backpack\diffuse.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="backpack\normal.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="backpack\roughness.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="backpack\specular.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="backpack\source_attribution.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
 </Project>
