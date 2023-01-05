@@ -1,10 +1,10 @@
 ﻿  Source.cpp
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(441,72): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(442,70): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(448,72): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(449,72): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(450,76): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(456,68): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(457,68): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(458,76): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(398,76): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(399,74): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(404,76): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(405,76): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(406,80): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(411,72): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(412,72): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thoma\Desktop\graphFinal\graphicsSetup\Source.cpp(413,80): warning C4305: 'argument': truncation from 'double' to 'float'
   graphicsSetup.vcxproj -> C:\Users\thoma\Desktop\graphFinal\x64\Debug\graphicsSetup.exe
