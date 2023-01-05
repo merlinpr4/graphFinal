@@ -217,7 +217,7 @@ int main()
         keyboardInput(window);
 
         //listener position set to camera
-        musicEngine->setListenerPosition(vec3df(camera.Position.x, camera.Position.y, camera.Position.z), vec3df(0, 0, 1));
+        musicEngine->setListenerPosition(vec3df(camera.Pos.x, camera.Pos.y, camera.Pos.z), vec3df(0, 0, 1));
 
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -225,7 +225,7 @@ int main()
         // lighting setup ---------------------------------------------------------------------------------------------------------------------------------
         lightingShader.use();
         lightingShader.setFloat("material.shininess", 32.0f);
-        lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader.setVec3("viewPos", camera.Pos);
         lightingShader.setInt("fog", fog);
 
         //point lights---------------------------------------------------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ int main()
         lightingShader.setFloat("pointLights[3].quadratic", 0.032f);
         
         // spotLight ---------------------------------------------------------------------------------------------------------------------------------
-        lightingShader.setVec3("spotLight.pos", camera.Position);
+        lightingShader.setVec3("spotLight.pos", camera.Pos);
         lightingShader.setVec3("spotLight.direction", camera.Front);
         lightingShader.setVec3("spotLight.ambient", ambient, ambient, ambient);
         lightingShader.setVec3("spotLight.diffuse", diffuse, diffuse, diffuse);
@@ -290,7 +290,7 @@ int main()
 
         matShader.use();
         matShader.setVec3("light.pos", lightPos);
-        matShader.setVec3("viewPos", camera.Position);
+        matShader.setVec3("viewPos", camera.Pos);
         matShader.setMat4("projection", projection);
         matShader.setMat4("view", view);
         matShader.setInt("fog", fog);
@@ -555,13 +555,13 @@ void mouse(GLFWwindow* window, double x, double y)
     float yoffset = lastYPos - yPos; 
     lastXPos = xPos;
     lastYPos = yPos;
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    camera.MouseMovement(xoffset, yoffset);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// mouse Zoom controls
 void scroll(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+    camera.MouseZoom(static_cast<float>(yoffset));
 }
 
 // set up the skybox cubemap ------------------------------------------------------------------------------------------------------------------------------
